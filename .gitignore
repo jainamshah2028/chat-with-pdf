@@ -28,6 +28,11 @@ venv/
 env/
 .env/
 
+# Environment Variables (IMPORTANT: Never commit API keys!)
+.env
+*.env
+!.env.example
+
 # Streamlit
 .streamlit/
 

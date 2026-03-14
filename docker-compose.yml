@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  chat-pdf:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chat-pdf-app
+    ports:
+      - "8501:8501"
+    environment:
+      # Load from .env file
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DEFAULT_PROVIDER=${DEFAULT_PROVIDER:-openai}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama2}
+      - DEBUG=${DEBUG:-false}
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    volumes:
+      # Mount local code for development (remove for production)
+      - .:/app
+      - /app/__pycache__
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Ollama service for local LLM (uncomment to use)
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama-service
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0:11434
+  #
+  # volumes:
+  #   ollama:
