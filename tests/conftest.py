@@ -1,8 +1,9 @@
 """Pytest configuration and fixtures for the test suite."""
 
 import os
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
 
 
 @pytest.fixture

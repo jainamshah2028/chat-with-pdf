@@ -1,12 +1,13 @@
 """Unit tests for the config module."""
 
 import os
-import pytest
-from unittest.mock import patch
-from pathlib import Path
-
 # Import config - adjust path if needed
 import sys
+from pathlib import Path
+from unittest.mock import patch
+
+import pytest
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import AppConfig, Config, Themes

@@ -3,97 +3,100 @@
 import os
 from pathlib import Path
 
+
 class AppConfig:
     """Application configuration settings"""
-    
+
     # File settings
     SUPPORTED_FORMATS = ["pdf", "txt", "docx"]
     MAX_FILE_SIZE_MB = 200
     MAX_FILES_PER_UPLOAD = 10
-    
+
     # Processing settings
     DEFAULT_CHUNK_SIZE = 1000
     DEFAULT_CHUNK_OVERLAP = 150
     MAX_RESULTS_PER_QUERY = 5
-    
+
     # Storage settings
     DATA_DIR = Path("data")
     CHAT_HISTORY_FILE = DATA_DIR / "chat_history.json"
     PROCESSED_DOCS_DIR = DATA_DIR / "processed_docs"
-    
+
     # UI settings
     PAGE_TITLE = "Advanced PDF Chat Assistant"
     PAGE_ICON = "📚"
     LAYOUT = "wide"
-    
+
     # AI Provider settings
     OPENAI_MODELS = {
         "GPT-3.5 Turbo": "gpt-3.5-turbo",
         "GPT-4": "gpt-4",
-        "GPT-4 Turbo": "gpt-4-turbo-preview"
+        "GPT-4 Turbo": "gpt-4-turbo-preview",
     }
-    
+
     OLLAMA_MODELS = {
         "Llama 2": "llama2",
-        "Mistral": "mistral", 
+        "Mistral": "mistral",
         "CodeLlama": "codellama",
-        "Phi": "phi"
+        "Phi": "phi",
     }
-    
+
     HUGGINGFACE_EMBEDDING_MODELS = {
         "All MiniLM L6 v2 (Fast)": "sentence-transformers/all-MiniLM-L6-v2",
         "All mpnet base v2 (Accurate)": "sentence-transformers/all-mpnet-base-v2",
-        "Multi-QA MiniLM": "sentence-transformers/multi-qa-MiniLM-L6-cos-v1"
+        "Multi-QA MiniLM": "sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     }
-    
+
     # Security settings
     HIDE_API_KEYS = True
     AUTO_SAVE_CHAT = True
-    
+
     # Performance settings
     ENABLE_CACHING = True
     CACHE_TTL_HOURS = 24
-    
+
     @classmethod
     def ensure_directories(cls):
         """Create necessary directories"""
         cls.DATA_DIR.mkdir(exist_ok=True)
         cls.PROCESSED_DOCS_DIR.mkdir(exist_ok=True)
-    
+
     @classmethod
     def get_openai_key(cls):
         """Get OpenAI API key from environment or return None"""
         return os.getenv("OPENAI_API_KEY")
-    
+
     @classmethod
     def set_openai_key(cls, api_key):
         """Set OpenAI API key in environment"""
         os.environ["OPENAI_API_KEY"] = api_key
 
+
 # Theme configurations
 class Themes:
     """UI theme configurations"""
-    
+
     DEFAULT = {
         "primary_color": "#667eea",
         "background_color": "#ffffff",
         "secondary_background_color": "#f0f2f6",
-        "text_color": "#262730"
+        "text_color": "#262730",
     }
-    
+
     DARK = {
         "primary_color": "#764ba2",
         "background_color": "#0e1117",
         "secondary_background_color": "#262730",
-        "text_color": "#fafafa"
+        "text_color": "#fafafa",
     }
-    
+
     BLUE = {
         "primary_color": "#1f77b4",
         "background_color": "#ffffff",
         "secondary_background_color": "#e8f4fd",
-        "text_color": "#262730"
+        "text_color": "#262730",
     }
+
 
 # Custom CSS styles
 CUSTOM_CSS = """
