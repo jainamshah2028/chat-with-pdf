@@ -9,6 +9,15 @@
 
 An intelligent PDF chat application powered by state-of-the-art LLMs and semantic search. Upload any PDF and ask natural language questions about its content!
 
+> **🎯 Getting Started?** Start with the **Simple App** for instant results:
+> ```bash
+> streamlit run app_simple.py  # No API keys needed - pure local processing
+> ```
+> Or use the **Advanced App** with AI features:
+> ```bash
+> streamlit run app_advanced.py  # Requires HuggingFace/OpenAI setup
+> ```
+
 ## ✨ Features
 
 - 📤 **Multi-file Upload** — Process multiple PDFs simultaneously
@@ -68,13 +77,18 @@ The app will open at `http://localhost:8501`
 
 ## 🎯 Available Versions
 
-| Version | Features | Best For |
-|---------|----------|----------|
-| **app_enhanced.py** ⭐ | Multi-file, chat history, 3 providers, UI polish | **Recommended for production** |
-| app_basic.py | Single file, OpenAI only, minimal deps | Learning/testing |
-| app_advanced.py | All features + analytics dashboard | Advanced use cases |
+| Version | Features | Dependencies | Best For |
+|---------|----------|-------------|----------|
+| **app_simple.py** ✨ NEW | Local search, no API calls | PyPDF, pdfplumber | **Start here - no setup needed** |
+| **app_enhanced.py** ⭐ | Chat history, 3 providers, modern UI | OpenAI/HuggingFace | Production with AI features |
+| app_advanced.py | Analytics, search algorithms, dashboard | All of above + plotly | Advanced analysis |
+| app.py | Single file, basic functionality | OpenAI only | Simple projects |
 
-👉 **Use `app_enhanced.py` as your primary entry point**
+### Quick Start Recommendations:
+
+1. **No APIs/Setup?** → `streamlit run app_simple.py`
+2. **Want AI Answers?** → `streamlit run app_enhanced.py` 
+3. **Need Analytics?** → `streamlit run app_advanced.py`
 
 ## 🔑 Environment Configuration
 
