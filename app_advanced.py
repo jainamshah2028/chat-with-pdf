@@ -459,11 +459,17 @@ def setup_llm_and_embeddings(provider_choice, api_key=None):
     
     elif provider_choice == "Free (Advanced Local Processing)":
         try:
-            embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+            # Try HuggingFace with local caching
+            embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L6-v2",
+                cache_folder=".cache",
+                model_kwargs={"trust_remote_code": True}
+            )
             return "advanced", embeddings, True
         except Exception as e:
-            st.error(f"❌ Free setup failed: {str(e)}")
-            return None, None, False
+            # Fallback to simple text-based search without embeddings
+            st.warning(f"⚠️ HuggingFace embeddings unavailable ({str(e)[:50]}...). Using local text search instead.")
+            return "local_search_only", None, True
 
 def load_pdf_with_fallback(file_path):
     """Enhanced PDF loading with progress tracking"""
@@ -635,36 +641,39 @@ with col1:
                 if not setup_success:
                     st.error("❌ Failed to setup AI provider. Please check your configuration.")
                 else:
-                    # Load and process PDF
-                    pages = load_pdf_with_fallback(file_path)
-                    
-                    if pages is not None:
-                        with st.spinner("✂️ Splitting document into chunks..."):
-                            # Split documents
-                            splitter = RecursiveCharacterTextSplitter(
-                                chunk_size=chunk_size, 
-                                chunk_overlap=chunk_overlap
-                            )
-                            docs = splitter.split_documents(pages)
-                            st.session_state.processed_docs = docs
+                    try:
+                        # Load and process PDF
+                        pages = load_pdf_with_fallback(file_path)
                         
-                        with st.spinner("📊 Generating analytics..."):
-                            # Generate analytics
-                            st.session_state.analytics = get_document_analytics(docs)
+                        if pages is not None:
+                            with st.spinner("✂️ Splitting document into chunks..."):
+                                # Split documents
+                                splitter = RecursiveCharacterTextSplitter(
+                                    chunk_size=chunk_size, 
+                                    chunk_overlap=chunk_overlap
+                                )
+                                docs = splitter.split_documents(pages)
+                                st.session_state.processed_docs = docs
                             
-                            # Record processing time
-                            st.session_state.processing_time = time.time() - start_time
-                        
-                        # Success message with stats
-                        st.markdown(f"""
-                        <div class="status-success">
-                            ✅ Document processed successfully! 
-                            {len(docs)} chunks created in {st.session_state.processing_time:.2f}s
-                        </div>
-                        """, unsafe_allow_html=True)
-
-# Chat interface
-if st.session_state.processed_docs:
+                            with st.spinner("📊 Generating analytics..."):
+                                # Generate analytics
+                                st.session_state.analytics = get_document_analytics(docs)
+                                
+                                # Record processing time
+                                st.session_state.processing_time = time.time() - start_time
+                            
+                            # Success message with stats
+                            st.markdown(f"""
+                            <div class="status-success">
+                                ✅ Document processed successfully! 
+                                {len(docs)} chunks created in {st.session_state.processing_time:.2f}s
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.error("❌ Failed to load PDF. Please try another file.")
+                    except Exception as e:
+                        st.error(f"❌ Error processing document: {str(e)}")
+                        st.info("💡 Try using a different PDF file or check your internet connection if using HuggingFace models.")
     st.markdown("### 💬 Intelligent Chat Interface")
     
     # Question input with enhanced UI
