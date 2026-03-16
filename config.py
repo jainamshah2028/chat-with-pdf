@@ -196,3 +196,6 @@ CUSTOM_CSS = """
 }
 </style>
 """
+
+# Alias for backward compatibility
+Config = AppConfig
