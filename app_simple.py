@@ -166,7 +166,7 @@ with col1:
         file_size_mb = len(uploaded_file.getbuffer()) / (1024 * 1024)
         st.info(f"📄 {uploaded_file.name} ({file_size_mb:.1f} MB)")
         
-        if st.button("🚀 Process Document", type="primary", use_container_width=True):
+        with st.spinner("📖 Processing PDF..."):
             if file_size_mb > 50:
                 st.error("❌ File too large (max 50MB)")
             else:
@@ -190,7 +190,11 @@ with col1:
                     else:
                         st.error("❌ Failed to load PDF")
                     
-                    os.unlink(file_path)
+                    try:
+                        os.unlink(file_path)
+                    except:
+                        pass
+                        
                 except Exception as e:
                     st.error(f"❌ Error: {str(e)}")
     
