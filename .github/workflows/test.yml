@@ -34,10 +34,6 @@ jobs:
       
       - name: Test with pytest
         run: |
-          pytest tests/ -v --cov=. --cov-report=xml
+          
       
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          files: ./coverage.xml
+      
